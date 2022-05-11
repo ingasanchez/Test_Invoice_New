@@ -120,7 +120,7 @@ namespace CustomerInvoice.Web.Controllers
 
                     invoinceId = db.Invoices.ToList().Select(i => i.Id).Max();
 
-                    // Save the Details
+                    // Save the Details tetet
 
                     foreach (var item in invoiceView.invoiceDetails)
                     {
@@ -130,7 +130,7 @@ namespace CustomerInvoice.Web.Controllers
                             Price = item.Price,
                             SubTotal = item.SubTotal,
                             TotalItbis = item.TotalItbis,
-                            InvoiceId = invoinceId,
+                            InvoiceId = invoinceId, 
                             Total = item.Total
                         };
                         db.InvoiceDetails.Add(detail);
