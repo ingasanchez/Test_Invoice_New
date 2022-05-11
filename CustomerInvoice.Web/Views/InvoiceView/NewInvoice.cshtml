@@ -1,0 +1,111 @@
+﻿@model CustomerInvoice.Web.Models.InvoiceView
+@{
+    ViewBag.Title = "New Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Invoice</h2>
+<h4 class="alert-danger">@ViewBag.Error</h4>
+<h4 class="alert-info">@ViewBag.Message</h4>
+
+@using (Html.BeginForm("NewInvoice", "InvoiceView", FormMethod.Post, new { id = "fistform" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <div style="background-color:beige">
+            <div class="form-group">
+                @Html.LabelFor(model => model.invoice.Customer.Id, "CustomerId", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.invoice.CustomerId, "", new { @class = "text-danger" })
+                </div>
+                <hr />
+                @Html.LabelFor(model => model.invoice.BillingDate, "BillingDate", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="datetime-local" value="@DateTime.Now.ToString("s")" id="BillingDate" name="BillingDate" />
+
+                </div>
+            </div>
+
+            @Html.ActionLink("Add Details", "AddDetail", new { }, new { @class = "btn btn-primary" })
+            <hr />
+        </div>
+
+    </div>
+}
+<h3>
+    Invoice Details
+</h3>
+<table class="table">
+    <tr class="thead-dark">
+        <th>
+            @Html.DisplayNameFor(model => model.invoiceDetail.Qty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.invoiceDetail.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.invoiceDetail.SubTotal)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.invoiceDetail.TotalItbis)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.invoiceDetail.Total)
+        </th>
+        <th></th>
+    </tr>
+
+    @for (int i = 0; i < Model.invoiceDetails.Count; i++)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.invoiceDetails[i].Qty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.invoiceDetails[i].Price)
+
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => Model.invoiceDetails[i].SubTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.invoiceDetails[i].TotalItbis)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => Model.invoiceDetails[i].Total)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.invoiceDetails[i].Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = Model.invoiceDetails[i].Id })
+            </td>
+        </tr>
+    }
+        <tr>
+            <td>
+
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <label>@Html.DisplayFor(modelItem => Model.invoice.Total) </label>
+            </td>
+        </tr>
+
+</table>
+
+<div >
+    <input type="submit" value="Save Invoice" id="NewInvoice" form="fistform" class="btn btn-success" />  
+</div>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

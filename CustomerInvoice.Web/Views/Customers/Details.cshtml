@@ -1,0 +1,57 @@
+﻿@model CustomerInvoice.Web.Models.Customer
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details Customer</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Adress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Adress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @if (Model.Status )
+            {
+                <span>Enable</span>
+            }
+            else
+            {
+                <span>Disable</span>
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerType.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerType.Description)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
