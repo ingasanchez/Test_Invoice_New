@@ -20,11 +20,11 @@ namespace CustomerInvoice.Web.Models
         [Required]
         [Display(Name = "Quantity")]
         public int Qty { get; set; }
-        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = false)]
         [Required]
         public decimal Price { get; set; }
         [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Total ITBIS")]
+        [Display(Name = "Total ITBIS(18%)")]
         public decimal TotalItbis { get; set; }
         [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         [Display(Name = "Sub-Total")]

@@ -14,9 +14,9 @@
 
     <div class="form-horizontal">
         <hr />
-        <div style="background-color:beige">
+        <div >
             <div class="form-group">
-                @Html.LabelFor(model => model.invoice.Customer.Id, "CustomerId", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.invoice.CustomerId, "CustomerId", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.invoice.CustomerId, "", new { @class = "text-danger" })
@@ -82,24 +82,39 @@
                 @Html.DisplayFor(modelItem => Model.invoiceDetails[i].Total)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = Model.invoiceDetails[i].Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = Model.invoiceDetails[i].Id })
+                @Html.ActionLink("Edit", "EditDetail", new { id = Model.invoiceDetails[i].Id }) |
+                @Html.ActionLink("Delete", "DeleteDetail",
+                new { id = Model.invoiceDetails[i].Id },
+                new { onclick = "return confirm('Are you sure you wish to delete this detail?');" }) 
             </td>
         </tr>
     }
-        <tr>
-            <td>
+   
+</table>
 
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <label>@Html.DisplayFor(modelItem => Model.invoice.Total) </label>
-            </td>
+<div>
+
+    <table border="0" style="width: 200px; height: 80px; 
+       position: relative ; left: 600px; top: 10px;">
+
+        <tr>
+            <td> <label>SubTotal:</label> </td>
+            <td> @Html.DisplayFor(modelItem => Model.invoice.SubTotal)</td>
         </tr>
 
-</table>
+        <tr>
+            <td> <label>Total ITBIS:</label> </td>
+            <td> @Html.DisplayFor(modelItem => Model.invoice.TotalItbis)</td>
+        </tr>
+        <tr>
+            <td> <label>Total:</label> </td>
+            <td><label> @Html.DisplayFor(modelItem => Model.invoice.Total)</label></td>
+        </tr>
+
+
+    </table>
+
+</div>
 
 <div >
     <input type="submit" value="Save Invoice" id="NewInvoice" form="fistform" class="btn btn-success" />  
@@ -108,4 +123,5 @@
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
+
     }

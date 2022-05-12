@@ -1,7 +1,9 @@
 ﻿using CustomerInvoice.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
@@ -32,10 +34,7 @@ namespace CustomerInvoice.Web.Controllers
             // guardar la lista de detalle en la sesión para que no se me pierdan los objetos agregados.
             Session["invoiceView"] = invoiceView;
 
-            var list = db.Customers.ToList();
-            list.Add(new Customer { Id = 0, CustName = "[Select Customer]" });
-            list = list.OrderBy(a => a.CustName).ToList();
-            ViewBag.CustomerId = new SelectList(list, "Id", "CustName");
+            callViewBag();
 
             return View(invoiceView);
         }
@@ -103,15 +102,7 @@ namespace CustomerInvoice.Web.Controllers
             {
                 try
                 {
-                    /*var invoice = new Invoice
-                    {
-                        CustomerId = customerId,
-                        BillingDate = billingDate,
-                        SubTotal = 0,
-                        TotalItbis = 0,
-                        Total = 0
-                    };*/
-
+                  
                     invoiceView.invoice.CustomerId = customerId;
                     invoiceView.invoice.BillingDate = billingDate;
 
@@ -166,16 +157,23 @@ namespace CustomerInvoice.Web.Controllers
 
         public ActionResult AddDetail ()
         {
+            callViewBag();
             return View();
         }
 
         public void callViewBag()
         {
+            
             var list = db.Customers.ToList();
             list.Add(new Customer { Id = 0, CustName = "[Select Customer]" });
             list = list.OrderBy(a => a.CustName).ToList();
             ViewBag.CustomerId = new SelectList(list, "Id", "CustName");
+
+
+
         }
+
+
 
         [HttpPost]
         public ActionResult AddDetail(InvoiceDetail invoiceDetail )
@@ -243,6 +241,68 @@ namespace CustomerInvoice.Web.Controllers
 
             return invoice;
 
+        }
+
+        public ActionResult EditDetail(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var invoiceView = Session["invoiceView"] as InvoiceView;
+
+            InvoiceDetail detail = invoiceView.invoiceDetails.Find(d => d.Id == id);
+            if (detail == null)
+            {
+                return HttpNotFound();
+            }
+            return View(detail);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditDetail([Bind(Include = "Qty,Price")] InvoiceDetail detail)
+        {
+            if (ModelState.IsValid)
+            {
+                var invoiceView = Session["invoiceView"] as InvoiceView;
+                InvoiceDetail det = invoiceView.invoiceDetails.Find(d => d.Id == detail.Id);
+
+                invoiceView.invoiceDetails.Remove(det);
+                detail.SubTotal = detail.Qty * detail.Price;
+                detail.TotalItbis = (detail.Qty * detail.Price) * 0.18M;
+                detail.Total = detail.SubTotal + detail.TotalItbis;
+                Session["invoiceView"] = null;
+                Session["invoiceView"] = invoiceView;
+                ActionResult resultado = AddDetail(detail);
+                return resultado;
+
+            }
+            return View(detail);
+        }
+
+        public ActionResult DeleteDetail(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var invoiceView = Session["invoiceView"] as InvoiceView;
+
+            InvoiceDetail detail = invoiceView.invoiceDetails.Find(d => d.Id == id);
+            if (detail == null)
+            {
+                return HttpNotFound();
+            }
+
+            invoiceView.invoiceDetails.Remove(detail);
+            Session["invoiceView"] = invoiceView;
+
+            callViewBag();
+            return View("NewInvoice", invoiceView);
+   
         }
 
         protected override void Dispose(bool disposing)

@@ -25,8 +25,11 @@ namespace CustomerInvoice.Web.Models
         [Required]
         [Display(Name = "Customer")]
         public int CustomerId { get; set; }
+        [Display(Name = "Billing Date")]
         public Nullable<System.DateTime> BillingDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public decimal TotalItbis { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public decimal SubTotal { get; set; }
 
         [Required]
