@@ -1,7 +1,5 @@
 # Test_Invoice_New
 
-Práctica realizada como requerimiento para puesto de trabajo en el área de programación, para la empresa Schad.
-
 - Esta prueba fue realizada en .Net, utilizando MVC y EntityFramework como ORM. 
 
 Notas de lugar: 
